@@ -30,11 +30,9 @@ class FlappyGame:
                 run = False
         pygame.quit()
     def train_ai(self,genome,config):
-        clock = pygame.time.Clock()
         net = neat.nn.FeedForwardNetwork.create(genome,config)
         run = True 
         while run:
-            clock.tick(200)
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     quit()
@@ -69,7 +67,7 @@ def run_neat(config):
     p.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(neat.Checkpointer(10))
+    p.add_reporter(neat.Checkpointer(5,filename_prefix='checkpoint/neat-checkpoint-'))
     
     winner=p.run(eval_genomes,500)
     with open("best.pickle","wb") as f:
@@ -88,5 +86,5 @@ if __name__ == "__main__":
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_path)
-    #run_neat(config)
-    test_ai(config)
+    run_neat(config)
+    #test_ai(config)
